@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opendart-core
+  namespace: stock
+spec:
+  selector:
+    app: opendart-core
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8082
+      nodePort: 30082
+      targetPort: 8082
+      name: opendartport
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opendart-core
+  namespace: stock
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opendart-core
+  template:
+    metadata:
+      labels:
+        app: opendart-core
+    spec:
+      containers:
+        - name: opendart-core
+          image: muyaho/fin-service-opendart
+          ports:
+            - name : opendartport
+              containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: environment-config

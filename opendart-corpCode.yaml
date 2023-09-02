@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: opendart-corpcode
+  namespace: stock
+spec:
+  timeZone: 'Asia/Seoul'
+  schedule: "0 12 * * 1-5"   #주중 하루 한 번 12시 실행
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: opendart-corpcode
+              image: muyaho/opendartcorpcode
+              imagePullPolicy: Always
+              env:
+                - name: TZ
+                  value: 'Asia/Seoul'
+              envFrom:
+                - configMapRef:
+                    name: environment-config
+          restartPolicy: Never

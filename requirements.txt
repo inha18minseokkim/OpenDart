@@ -1,0 +1,10 @@
+fastapi
+asyncio
+nest-asyncio
+pydantic
+uvicorn
+loguru
+requests
+cryptography
+pymongo
+kafka-python

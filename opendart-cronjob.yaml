@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: opendart-cronjob
+  namespace: stock
+spec:
+  timeZone: 'Asia/Seoul'
+  schedule: "*/10 8-20 * * 1-5"   #주중 5분에 한번 8시 부터 20시 까지 계속 갱신
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: opendart-cronjob
+              image: muyaho/opendartcronjob
+              imagePullPolicy: Always
+              env:
+                - name: TZ
+                  value: 'Asia/Seoul'
+                - name: LAST_REPORT_AT
+                  value: "Y"
+                - name: CORP_CLS
+                  value: "Y"
+              envFrom:
+                - configMapRef:
+                    name: environment-config
+          restartPolicy: Never

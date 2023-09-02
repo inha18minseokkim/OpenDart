@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+WORKDIR /code
+
+COPY ./requirements.txt ./code/requirements.txt
+
+RUN pip install -r ./code/requirements.txt
+RUN apt-get update
+RUN apt-get install -y openssh-server
+RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+
+
+EXPOSE 8082
+EXPOSE 22
+
+CMD ["python"]

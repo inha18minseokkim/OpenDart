@@ -1,0 +1,19 @@
+FROM python:3.9
+#FROM python:3.9-slim
+
+#RUN set -eux && \
+#    export DEBIAN_FRONTEND=noninteractive && \
+#    apt-get update && \
+#    apt-get install -y default-libmysqlclient-dev build-essential && \
+#    rm -rf /var/lib/apt/lists/*
+ENV TZ=Asia/Seoul
+
+WORKDIR /code
+
+COPY ../CronJob/Stock/opendart/requirements.txt ./code/requirements.txt
+
+RUN pip install --no-cache-dir -r ./code/requirements.txt
+
+COPY ../CronJob/Stock/opendart /code/opendart
+
+CMD ["python","./opendart/main.py"]
